@@ -4,26 +4,51 @@ import './App.css';
 
 class Cell extends React.Component
 {  
-  // constructor(props)
-  // {
-  //   super(props);
-  //   this.state =
-  //   {
-  //     type : 0,
-  //     bgColor: 'gray'
-  //   }
-  // }
+  constructor(props)
+  {
+    super(props);
+    this.state =
+    {
+      typecell : '',
+    }
+  }
   render()
   {
-    return (
-      <button
-        className="cell"
-        onClick = {() => this.props.onClick()}
-        value = {this.props.value}
-        >
-          {this.props.value}
-        </button>
-    )
+    switch (this.state.typecell) {
+      case 'Empty':
+        return (
+          <button
+            className="cell-empty"
+            onClick = {() => this.props.onClick()}
+            value = {this.props.value}  
+            >
+          </button>)
+      case 'Incorrect':
+          return (
+            <button
+              className="cell-empty"
+              onClick = {() => this.props.onClick()}
+              value = {this.props.value}  
+              >
+                X
+            </button>)
+      case 'Full':
+          return (
+            <button
+              className="cell-full"
+              onClick = {() => this.props.onClick()}
+              value = {this.props.value}  
+              >
+            </button>)
+      default:
+        return (
+          <button
+            className="cell"
+            onClick = {() => this.props.onClick()}
+            value = {this.props.value}  
+            >
+          </button>)
+    }
   }
 }
 
@@ -44,9 +69,7 @@ class Board extends React.Component
   render()
   {
     var rows =  this.props.board.map( (item, row) => { // item is the actual object in board and row is the row index
-      console.log(row)
       var entry = item.map((element, j) => {
-        console.log(j)
         return (
           <td key = {row * this.props.width + j}>{this.renderCell(row * this.props.width + j)}</td>
         )

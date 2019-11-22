@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "7e0a47582f89b83850e491e740a6b383",
+    "revision": "b5d0067acb3d93e84f5d30160e0eb4cf",
     "url": "/picross/index.html"
   },
   {

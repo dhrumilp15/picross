@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b5d0067acb3d93e84f5d30160e0eb4cf",
+    "revision": "929b32127bf4ca6539aecb02a2fbe1f4",
     "url": "/picross/index.html"
   },
   {
-    "revision": "7f9dc92cc3127c99626e",
+    "revision": "94e9d672c534eea40fc6",
     "url": "/picross/static/css/main.d3139d39.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/picross/static/js/2.745685cc.chunk.js"
   },
   {
-    "revision": "7f9dc92cc3127c99626e",
-    "url": "/picross/static/js/main.cd8abc42.chunk.js"
+    "revision": "94e9d672c534eea40fc6",
+    "url": "/picross/static/js/main.8f9ffc05.chunk.js"
   },
   {
     "revision": "a5fd2e8b9e3eeeaa68f2",

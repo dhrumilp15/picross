@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/picross/static/css/main.d3139d39.chunk.css",
+    "main.js": "/picross/static/js/main.cd8abc42.chunk.js",
+    "main.js.map": "/picross/static/js/main.cd8abc42.chunk.js.map",
+    "runtime-main.js": "/picross/static/js/runtime-main.94d080f1.js",
+    "runtime-main.js.map": "/picross/static/js/runtime-main.94d080f1.js.map",
+    "static/js/2.745685cc.chunk.js": "/picross/static/js/2.745685cc.chunk.js",
+    "static/js/2.745685cc.chunk.js.map": "/picross/static/js/2.745685cc.chunk.js.map",
+    "index.html": "/picross/index.html",
+    "precache-manifest.112b53edfb02bb929228b3cb029dac42.js": "/picross/precache-manifest.112b53edfb02bb929228b3cb029dac42.js",
+    "service-worker.js": "/picross/service-worker.js",
+    "static/css/main.d3139d39.chunk.css.map": "/picross/static/css/main.d3139d39.chunk.css.map",
+    "static/media/logo.svg": "/picross/static/media/logo.25bf045c.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.94d080f1.js",
+    "static/js/2.745685cc.chunk.js",
+    "static/css/main.d3139d39.chunk.css",
+    "static/js/main.cd8abc42.chunk.js"
+  ]
+}

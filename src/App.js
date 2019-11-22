@@ -4,22 +4,23 @@ import './App.css';
 
 class Cell extends React.Component
 {  
-  constructor(props)
-  {
-    super(props);
-    this.state =
-    {
-      typecell : '',
-    }
-  }
+  // constructor(props)
+  // {
+  //   super(props);
+  //   this.state =
+  //   {
+  //     typecell : '',
+  //   }
+  // }
   render()
   {
-    switch (this.state.typecell) {
+    switch (this.props.typecell) {
       case 'Empty':
         return (
           <button
             className="cell-empty"
-            onClick = {() => this.props.onClick()}
+            onClick = {(e) => this.props.onClick(e)}
+            onContextMenu = {(e) => this.props.onContextMenu(e)}
             value = {this.props.value}  
             >
           </button>)
@@ -27,7 +28,8 @@ class Cell extends React.Component
           return (
             <button
               className="cell-empty"
-              onClick = {() => this.props.onClick()}
+              onClick = {(e) => this.props.onClick(e)}
+              onContextMenu = {(e) => this.props.onContextMenu(e)}   
               value = {this.props.value}  
               >
                 X
@@ -36,15 +38,17 @@ class Cell extends React.Component
           return (
             <button
               className="cell-full"
-              onClick = {() => this.props.onClick()}
+              onClick = {(e) => this.props.onClick(e)}
+              onContextMenu = {(e) => this.props.onContextMenu(e)}
               value = {this.props.value}  
               >
             </button>)
       default:
         return (
-          <button
+          <button            
             className="cell"
-            onClick = {() => this.props.onClick()}
+            onClick = {(e) => this.props.onClick(e)}
+            onContextMenu = {(e) => this.props.onContextMenu(e)}
             value = {this.props.value}  
             >
           </button>)
@@ -60,8 +64,10 @@ class Board extends React.Component
     let row = Math.floor(i/this.props.height)
     return (
       <Cell
-        value = {this.props.board[row][column]}
-        onClick = {() => this.props.onClick(i)}
+        value = {this.props.board[row][column][0]}
+        onClick = {(e) => this.props.onClick(e,i)}
+        onContextMenu = {(e) => this.props.onContextMenu(e,i)}
+        typecell = {this.props.board[row][column][1]}
       />
     )
   }
@@ -105,7 +111,7 @@ class App extends React.Component
         let row = []
         for(let j = 0; j < width; j++)
         {
-          row.push(null)
+          row.push([null, ''])
         }
         board[i] = row
       };
@@ -118,14 +124,30 @@ class App extends React.Component
       }
   }
 
-  handleClick(i)
+  handleClick = (event,i) =>
   {
-
-    // map(int, list)
+    // Intention is to fill cell
+    // alert('left click')
     var column = i % this.state.width
     var row = Math.floor(i/this.state.height)
     var board = this.state.board.slice(0)
-    board[row][column] = i
+    board[row][column][0] = i
+    board[row][column][1] = 'Full'
+    this.setState({
+      board
+    })
+  }
+
+  handleContextMenu = (event, i) =>
+  {
+    //Intention is to declare cell empty
+    // alert('right click')
+    event.preventDefault()
+    var column = i % this.state.width 
+    var row = Math.floor(i/this.state.height)
+    var board = this.state.board.slice(0)
+    board[row][column][0] = i
+    board[row][column][1] = 'Empty'
     this.setState({
       board
     })
@@ -138,7 +160,8 @@ class App extends React.Component
         board = {this.state.board}
         height = {this.state.height}
         width = {this.state.width}
-        onClick = {i => this.handleClick(i)}
+        onClick = {(event,i) => this.handleClick(event,i)}
+        onContextMenu = {(event,i) => this.handleContextMenu(event, i)}
       />
     )
   }

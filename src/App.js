@@ -1,17 +1,9 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+var seedrandom = require('seedrandom');
 
 class Cell extends React.Component
 {  
-  // constructor(props)
-  // {
-  //   super(props);
-  //   this.state =
-  //   {
-  //     typecell : '',
-  //   }
-  // }
   render()
   {
     switch (this.props.typecell) {
@@ -106,21 +98,26 @@ class App extends React.Component
       var width = 10
       var height = 10
       var board = []
+      var actual = []
       for (let i = 0; i < height; i++)
       {
         let row = []
+        let actualrow = []
         for(let j = 0; j < width; j++)
         {
           row.push([null, ''])
+          actualrow.push(null)
         }
         board[i] = row
+        actual[i] = actualrow
       };
 
       this.state = 
       {
         height,
         width,
-        board, 
+        board,
+        actual,
       }
   }
 
@@ -128,11 +125,20 @@ class App extends React.Component
   {
     // Intention is to fill cell
     // alert('left click')
+    
     var column = i % this.state.width
     var row = Math.floor(i/this.state.height)
     var board = this.state.board.slice(0)
+    
+    if (board[row][column][1] != '') return
     board[row][column][0] = i
-    board[row][column][1] = 'Full'
+    if (this.state.actual[row][column] == 'Full')
+    {
+      board[row][column][1] = 'Full'
+    } else {
+      board[row][column][1] = 'Incorrect'
+    }
+    
     this.setState({
       board
     })
@@ -146,23 +152,61 @@ class App extends React.Component
     var column = i % this.state.width 
     var row = Math.floor(i/this.state.height)
     var board = this.state.board.slice(0)
+    if (board[row][column][1] != '') return
     board[row][column][0] = i
-    board[row][column][1] = 'Empty'
+    if (this.state.actual[row][column] == 'Empty')
+    {
+      board[row][column][1] = 'Empty'
+    } else {
+      board[row][column][1] = 'Incorrect'
+    }
     this.setState({
       board
     })
+  }
+
+  generateBoard(seed)
+  {
+    if (seed === undefined)
+    {
+      seed = 'hello'
+    }
+    var rng = seedrandom(seed)
+    var actual = this.state.actual.slice(0)
+    for (let row = 0; row < this.state.height; row++)
+    {
+      for (let col = 0; col < this.state.width; col++)
+      {
+        console.log(rng())
+        var rando = Math.ceil(rng() * 2)
+        console.log(rando)
+        actual[row][col] =  (rando == 2) ? 'Full' : 'Empty' 
+      }
+    }
+    this.setState({actual})
+  }
+
+  componentDidMount()
+  {
+    //Extract seed from db
+    this.generateBoard()
   }
   
   render()
   {
     return (
-      <Board
-        board = {this.state.board}
-        height = {this.state.height}
-        width = {this.state.width}
-        onClick = {(event,i) => this.handleClick(event,i)}
-        onContextMenu = {(event,i) => this.handleContextMenu(event, i)}
-      />
+      <div>
+        <div>
+          <p>Check out <a href="http://liouh.com/picross">the picross source</a> for what I'm going to completely revamp because Mr. Henry Liou is too busy</p>
+        </div>
+        <Board
+          board = {this.state.board}
+          height = {this.state.height}
+          width = {this.state.width}
+          onClick = {(event,i) => this.handleClick(event,i)}
+          onContextMenu = {(event,i) => this.handleContextMenu(event, i)}
+        />
+      </div>
     )
   }
 }

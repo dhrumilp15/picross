@@ -50,6 +50,7 @@ class Cell extends React.Component
 
 class Board extends React.Component
 {
+
   renderCell(i)
   {
     let column = i % this.props.width
@@ -66,18 +67,25 @@ class Board extends React.Component
 
   render()
   {
+    console.log(this.props.hintsY)
     var rows =  this.props.board.map( (item, row) => { // item is the actual object in board and row is the row index
-      var entry = item.map((element, j) => {
+      var entry = item.map((_, j) => {
         return (
           <td key = {row * this.props.width + j}>{this.renderCell(row * this.props.width + j)}</td>
         )
       })
       return (
-        <tr key = {row}>{entry}</tr>
+        <tr key = {row}><td>{this.props.hintsY[row]}</td>{entry}</tr>
       )
     })
+
+    
+
     return (
       <div>
+        <div className="board-row">
+          {this.props.hintsX[0]}
+        </div>
         <table className="table">
           <tbody>
             {rows}
@@ -114,14 +122,96 @@ class App extends React.Component
 
       this.state = 
       {
-        height,
-        width,
-        board,
-        actual,
+        height : height,
+        width : width,
+        board : board,
+        actual : actual,
+        hintsX: [],
+        hintsY : []
       }
   }
 
-  handleClick = (event,i) =>
+  getrowHints()
+  {
+    var hintsY = []
+    for (let row = 0; row < this.state.height; row++)
+    {
+      var rowHints = []
+      var streak = 0
+      for (let col = 0; col < this.state.width; col++)
+      {
+        if (this.state.actual[row][col] == 'Full')
+        {
+          streak += 1
+        }
+        else
+        {
+          if (streak > 0)
+          {
+            rowHints.push(streak)
+            streak = 0
+          }
+        }
+      }
+      if (streak > 0)
+      {
+        rowHints.push(streak)
+      }
+      console.log("rowHints: " + rowHints)
+      hintsY.push(rowHints)
+    }
+    console.log(hintsY)
+    this.setState({ hintsY })
+  }
+
+  getcolHints()
+  {
+    var hints = []
+    var actual = this.state.actual.slice(0)
+    for (let i = 0; i < this.state.height; i++)
+    {
+      var colHints = []
+      var streak = 0
+      for (let j = 0; j < this.state.width; j++)
+      {
+        if (actual[j][i] == 'Full')
+        {
+          streak += 1
+        }
+        else
+        {
+          if (streak > 0)
+          {
+            colHints.push(streak)
+            streak = 0
+          }
+        }
+      }
+      hints.push(colHints)
+    }
+    this.setState({ hintsX : hints })
+  }
+
+  generateBoard(seed)
+  {
+    if (seed === undefined)
+    {
+      seed = '' + new Date().getTime
+    }
+    var rng = seedrandom(seed)
+    var actual = this.state.actual.slice(0)
+    for (let row = 0; row < this.state.height; row++)
+    {
+      for (let col = 0; col < this.state.width; col++)
+      {
+        var rando = Math.ceil(rng() * 2)
+        actual[row][col] =  (rando == 2) ? 'Full' : 'Empty' 
+      }
+    }
+    this.setState({actual})
+  }
+
+  handleClick = (_event,i) =>
   {
     // Intention is to fill cell
     // alert('left click')
@@ -160,36 +250,17 @@ class App extends React.Component
     } else {
       board[row][column][1] = 'Incorrect'
     }
+
     this.setState({
       board
     })
   }
 
-  generateBoard(seed)
-  {
-    if (seed === undefined)
-    {
-      seed = 'hello'
-    }
-    var rng = seedrandom(seed)
-    var actual = this.state.actual.slice(0)
-    for (let row = 0; row < this.state.height; row++)
-    {
-      for (let col = 0; col < this.state.width; col++)
-      {
-        console.log(rng())
-        var rando = Math.ceil(rng() * 2)
-        console.log(rando)
-        actual[row][col] =  (rando == 2) ? 'Full' : 'Empty' 
-      }
-    }
-    this.setState({actual})
-  }
-
   componentDidMount()
   {
-    //Extract seed from db
     this.generateBoard()
+    this.getcolHints()
+    this.getrowHints()
   }
   
   render()
@@ -198,6 +269,10 @@ class App extends React.Component
       <div>
         <div>
           <p>Check out <a href="http://liouh.com/picross">the picross source</a> for what I'm going to completely revamp because Mr. Henry Liou is too busy</p>
+          <p>Check out my progress on this on my <a href="https://github.com/dhrumilp15/picross">github</a> </p>
+        </div>
+        <div>
+          
         </div>
         <Board
           board = {this.state.board}
@@ -205,6 +280,9 @@ class App extends React.Component
           width = {this.state.width}
           onClick = {(event,i) => this.handleClick(event,i)}
           onContextMenu = {(event,i) => this.handleContextMenu(event, i)}
+          actual = {this.state.actual}
+          hintsX  = {this.state.hintsX}
+          hintsY  = {this.state.hintsY}
         />
       </div>
     )

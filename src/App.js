@@ -84,7 +84,7 @@ class Board extends React.Component
     return (
       <div>
         <div className="board-row">
-          {this.props.hintsX[0]}
+          
         </div>
         <table className="table">
           <tbody>
@@ -196,7 +196,7 @@ class App extends React.Component
   {
     if (seed === undefined)
     {
-      seed = '' + new Date().getTime
+      seed = '' + new Date().getTime()
     }
     var rng = seedrandom(seed)
     var actual = this.state.actual.slice(0)
